@@ -151,6 +151,10 @@ public interface SampleService {
 
     @Action(MediaStore.ACTION_IMAGE_CAPTURE)
     Observable<Response> startImageCapture();
+
+     @Action(Intent.ACTION_DIAL)
+     @Uri("tel:{phone}")
+     void startTel(@UriReplace("phone") String phone);
 }
 
 ```
@@ -171,6 +175,11 @@ public interface SampleService {
                     }
                 });
     }
+
+    public void startTel(String phone){
+            sampleService
+                    .startTel(phone);
+        }
 ```
 
 ### Words
