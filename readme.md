@@ -151,13 +151,26 @@ public interface SampleService {
 
     @Action(MediaStore.ACTION_IMAGE_CAPTURE)
     Observable<Response> startImageCapture();
-
-
-    @Action(Intent.ACTION_DIAL)
-    @Uri("tel:{phone}")
-    void startTel(@UriReplace("phone") String phone);
 }
 
+```
+```java
+    public void startImageCapture(){
+        sampleService
+                .startImageCapture()
+                .subscribe(new Action1<Response>() {
+                    @Override
+                    public void call(Response response) {
+                        Intent data = response.getData();
+                        int resultCode = response.getResultCode();
+                        if (resultCode == RESULT_OK) {
+                            Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                            ImageView imageView = (ImageView) findViewById(R.id.ImageView_Capture_Image);
+                            imageView.setImageBitmap(imageBitmap);
+                        }
+                    }
+                });
+    }
 ```
 
 ### Words
