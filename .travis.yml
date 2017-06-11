@@ -6,8 +6,8 @@ notifications:      # 每次构建的时候是否通知，如果不想收到通�
 android:
   components:
      - tools
-     - build-tools-25.0.0
-     - android-23
+     - build-tools-25.0.2
+     - android-25
      - extra-android-m2repository     # Android Support Repository
      - extra-android-support          # Support Library
 before_install:

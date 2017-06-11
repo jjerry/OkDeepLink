@@ -7,7 +7,7 @@ OkDeepLink provides a annotation-based api to manipulate app deep links.
 - register deep links  with annotation `@Path`、`@Activity`
 - start  deep links by service which  inject to Activity with annotation `@Service`
 - url or bundle parameters auto inject to activity , restore  when activity recreate  by annotation `@Query`
-- synchronous intercept deep links in ui  thread  with annotation `@Intercept`
+- async intercept deep links in ui  thread  with annotation `@Intercept`
 - support activity result  with `rxJava`
 
 
