@@ -1,0 +1,70 @@
+apply plugin: 'com.android.application'
+apply plugin: 'android-aspectjx'
+
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
+
+    defaultConfig {
+        applicationId "okdeeplink.sample"
+        minSdkVersion 14
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0"
+
+
+    }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+
+
+
+//    android.applicationVariants.all { variant ->
+//        if (variant.install) {
+//            variant.install.doLast {
+//                description "Installs and Runs the APK for ${variant.description}."
+//                def getMainActivity = { file ->
+//                    new XmlSlurper().parse(file).application.activity.find {
+//                        it.'intent-filter'.find { filter ->
+//                            return filter.action.find {
+//                                it.'@android:name'.text() == 'android.intent.action.MAIN'
+//                            } \
+//                                    && filter.category.find {
+//                                it.'@android:name'.text() == 'android.intent.category.LAUNCHER'
+//                            }
+//                        }
+//                    }.'@android:name'
+//                }
+//                exec {
+//                    def activityClass =
+//                            getMainActivity(variant.outputs.processManifest.manifestOutputFile)
+//                    commandLine android.adbExe, 'shell', 'am', 'start', '-n',
+//                            "${variant.applicationId}/${activityClass}"
+//
+//                }
+//            }
+//        }
+//    }
+}
+
+configurations.all {
+    resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+}
+
+dependencies {
+    compile project(":second")
+    compile project(':okdeeplink-api')
+    annotationProcessor project(':okdeeplink-processor')
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
+}
+
+
+
+
+

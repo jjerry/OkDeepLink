@@ -1,0 +1,26 @@
+apply plugin: 'groovy'
+
+dependencies {
+    compile gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:2.1.3'
+    compile 'com.hujiang.aspectjx:gradle-android-plugin-aspectjx:1.0.10'
+
+}
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+//compileGroovy {
+//    sourceCompatibility = 1.6
+//    targetCompatibility = 1.6
+//    options.encoding = 'UTF-8'
+//}
+
+sourceSets {
+    main {
+        groovy {
+            srcDirs = ['src/main/groovy']
+        }
+    }
+}
+
+apply from: "${rootDir}/pom-evaluator.gradle"

@@ -1,0 +1,20 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.7
+
+repositories {
+
+  jcenter()
+
+}
+
+dependencies {
+  compile project(':okdeeplink-annotation')
+  compile 'org.aspectj:aspectjrt:1.8.9'
+  compile 'com.google.auto.service:auto-service:1.0-rc2'
+  compile 'com.squareup:javapoet:1.8.0'
+  compile 'com.google.auto:auto-common:0.6'
+
+}
+
+apply from: "${rootDir}/pom-evaluator.gradle"

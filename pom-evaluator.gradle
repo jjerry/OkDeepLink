@@ -1,0 +1,19 @@
+apply from: "${rootDir}/bintrayUpload.gradle"
+afterEvaluate {
+    install {
+        repositories.mavenInstaller {
+            pom.groupId = rootProject.groupId
+            pom.version = rootProject.versionName
+
+            pom.whenConfigured { pom ->
+                pom.dependencies.findAll { dep -> dep.groupId == rootProject.name }.collect { dep ->
+                    dep.groupId = pom.groupId = rootProject.groupId
+                    dep.version = pom.version = rootProject.versionName
+                }
+            }
+        }
+    }
+}
+bintray.pkg {
+    name = project.archivesBaseName
+}

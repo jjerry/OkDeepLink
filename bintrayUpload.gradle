@@ -1,0 +1,123 @@
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+// load properties
+Properties properties = new Properties()
+DataInputStream localDataInputStream = null;
+DataInputStream gradleDataInputStream = null;
+
+if (project.rootProject.file('local.properties').canRead()) {
+    File localPropertiesFile = project.rootProject.file('local.properties');
+    localDataInputStream = localPropertiesFile.newDataInputStream();
+    properties.load(localDataInputStream);
+}
+
+if (project.file("gradle.properties").canRead()) {
+    File projectPropertiesFile = project.file("gradle.properties");
+    gradleDataInputStream = projectPropertiesFile.newDataInputStream();
+    properties.load(gradleDataInputStream);
+}
+
+// read properties
+def projectDescription = properties.getProperty("description")
+def projectGroupId = properties.getProperty("groupId")
+def projectArtifactId = properties.getProperty("artifactId")
+def projectVersionName = properties.getProperty("versionName")
+def projectPackaging = properties.getProperty("packaging")
+def projectSiteUrl = properties.getProperty("siteUrl")
+def projectGitUrl = properties.getProperty("gitUrl")
+
+def developerId = properties.getProperty("developer.id")
+def developerName = properties.getProperty("developer.name")
+def developerEmail = properties.getProperty("developer.email")
+
+def bintrayUser = properties.getProperty("bintray.user")
+def bintrayApikey = properties.getProperty("bintray.apikey")
+if (localDataInputStream != null) {
+    localDataInputStream.close();
+}
+if (gradleDataInputStream != null) {
+    gradleDataInputStream.close();
+}
+
+version = projectVersionName
+group = projectGroupId
+
+
+
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging projectPackaging
+                // Add your description here
+                name projectDescription   //项目描述
+                url projectSiteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id developerId       //填写的一些基本信息
+                        name developerName
+                        email developerEmail
+                    }
+                }
+                scm {
+                    connection projectGitUrl
+                    developerConnection projectGitUrl
+                    url projectSiteUrl
+                }
+            }
+        }
+    }
+}
+
+if (project.hasProperty("android")) { // Android libraries
+    task sourcesJar(type: Jar) {
+        classifier = 'sources'
+        from android.sourceSets.main.java.srcDirs
+    }
+
+    task javadoc(type: Javadoc) {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        options.encoding = "UTF-8" //添加编码方式，才不会报编码错误
+
+    }
+} else { // Java libraries
+    task sourcesJar(type: Jar, dependsOn: classes) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayApikey
+    configurations = ['archives']
+    pkg {
+        repo = "maven"
+        name = projectArtifactId    //发布到JCenter上的项目名字
+        websiteUrl = projectGitUrl
+        vcsUrl = projectGitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

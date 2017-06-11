@@ -1,0 +1,14 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="okdeeplink.second">
+
+    <application >
+
+        <activity
+            android:name="okdeeplink.second.SecondActivity"
+            android:label="Second">
+        </activity>
+
+
+    </application>
+
+</manifest>
