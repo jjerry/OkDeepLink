@@ -30,4 +30,3 @@ dependencies {
 }
 
 apply from: "${rootDir}/pom-evaluator.gradle"
-

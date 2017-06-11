@@ -14,6 +14,4 @@ afterEvaluate {
         }
     }
 }
-bintray.pkg {
-    name = project.archivesBaseName
-}
+

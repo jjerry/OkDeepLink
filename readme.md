@@ -1,4 +1,6 @@
 # OkDeepLink
+[![Build Status](https://travis-ci.org/HongJun2046/OkDeepLink.svg?branch=master)](https://travis-ci.org/HongJun2046/OkDeepLink)
+[ ![Download](https://api.bintray.com/packages/zmanchina/maven/okdeeplink-gradle/images/download.svg) ](https://bintray.com/zmanchina/maven/okdeeplink-gradle/_latestVersion)
 
 OkDeepLink provides a annotation-based api to manipulate app deep links.
 
@@ -14,11 +16,10 @@ OkDeepLink provides a annotation-based api to manipulate app deep links.
 
 ```groovy
 repositories {
-
-
+   jcenter()
 }
 dependencies {
-    classpath 'com.hongjun:okdeeplink-gradle:1.0.6'
+    classpath 'com.hongjun:okdeeplink-gradle:1.0.0'
 }
 ```
 
@@ -67,32 +68,37 @@ In the future, I will use annotation `@AppLink` which define scheme and host  in
 ```java
 public interface SampleService {
 
+
     @Path("/main")
     @Activity(MainActivity.class)
     void startMainActivity(@Query("key") String key);
 }
 ```
 path must start with "/"
+when app receive uri like `old://app/main?key=value`, `DeepLinkActivity` will start ,then dispatch the deep link to the appropriate `Activity`.
+
 
 **In Activity Or Fragment File**
 
-```
-    @Service
-    SampleService sampleService;
-    @Query("key") String key;
-
-```
-
-when app receive uri like `old://app/main?key=value`, `DeepLinkActivity` will start ,then dispatch the deep link to the appropriate `Activity`.
 You also start MainActivity by service in app.
 ```java
-sampleService.startMainActivity("value");
+public class SecondActivity extends AppCompatActivity {
+
+       @Service
+       SampleService sampleService;
+       @Query("key")
+       String key;
+
+
+       sampleService.startMainActivity("value");
+}
+
 ```
 
 ### Intercept
 If you want Intercept `old://app/second`, you can use `@Intercept`
 
-```
+```java
 @Intercept(path = "/second")
 public class SecondInterceptor extends Interceptor {
     @Override
@@ -131,11 +137,28 @@ public class SecondInterceptor extends Interceptor {
 }
 ```
 
-![拦截`old://app/second` ])
+![intercept`old://app/second` ](https://raw.githubusercontent.com/HongJun2046/OkDeepLink/master/snapshot/intercept_preview.png)
 
 
 ### Log
 I define `LogInterceptor`, this can log deep links which start、notFound、error , log tag is `OkDeepLink`
+
+### Other Way
+You can start  intent action by service
+
+```java
+public interface SampleService {
+
+    @Action(MediaStore.ACTION_IMAGE_CAPTURE)
+    Observable<Response> startImageCapture();
+
+
+    @Action(Intent.ACTION_DIAL)
+    @Uri("tel:{phone}")
+    void startTel(@UriReplace("phone") String phone);
+}
+
+```
 
 ### Words
 

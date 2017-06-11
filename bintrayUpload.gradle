@@ -12,8 +12,8 @@ if (project.rootProject.file('local.properties').canRead()) {
     properties.load(localDataInputStream);
 }
 
-if (project.file("gradle.properties").canRead()) {
-    File projectPropertiesFile = project.file("gradle.properties");
+if (project.rootProject.file("gradle.properties").canRead()) {
+    File projectPropertiesFile = project.rootProject.file("gradle.properties");
     gradleDataInputStream = projectPropertiesFile.newDataInputStream();
     properties.load(gradleDataInputStream);
 }
@@ -87,7 +87,6 @@ if (project.hasProperty("android")) { // Android libraries
     task javadoc(type: Javadoc) {
         source = android.sourceSets.main.java.srcDirs
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-        options.encoding = "UTF-8" //添加编码方式，才不会报编码错误
 
     }
 } else { // Java libraries
@@ -102,6 +101,13 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
     from javadoc.destinationDir
 }
 
+javadoc {
+    options {
+        encoding "UTF-8"
+        charSet 'UTF-8'
+    }
+}
+
 
 artifacts {
     archives javadocJar
@@ -114,7 +120,7 @@ bintray {
     configurations = ['archives']
     pkg {
         repo = "maven"
-        name = projectArtifactId    //发布到JCenter上的项目名字
+        name = project.archivesBaseName    //发布到JCenter上的项目名字
         websiteUrl = projectGitUrl
         vcsUrl = projectGitUrl
         licenses = ["Apache-2.0"]

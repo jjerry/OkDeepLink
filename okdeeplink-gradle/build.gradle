@@ -1,4 +1,5 @@
 apply plugin: 'groovy'
+apply from: "${rootDir}/pom-evaluator.gradle"
 
 dependencies {
     compile gradleApi()
@@ -22,5 +23,3 @@ sourceSets {
         }
     }
 }
-
-apply from: "${rootDir}/pom-evaluator.gradle"
